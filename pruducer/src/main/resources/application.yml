@@ -1,0 +1,18 @@
+spring:
+  rabbitmq:
+    addresses: localhost:5672
+    username: guest
+    password: guest
+    connection-timeout: 5000
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+server:
+  servlet:
+    context-path: /rabbit-producer
+  port: 8001
+
