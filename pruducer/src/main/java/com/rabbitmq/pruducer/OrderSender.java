@@ -1,5 +1,8 @@
 package com.rabbitmq.pruducer;
 
+import com.rabbitmq.constant.Constant;
+import com.rabbitmq.mapper.BrokerMessageLogMapper;
+import com.rabbitmq.model.BrokerMessageLogPO;
 import com.rabbitmq.model.Order;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
@@ -26,4 +29,27 @@ public class OrderSender {
                 order, new CorrelationData(order.getMessageId()));
     }
 
+
+    @Autowired
+    private BrokerMessageLogMapper brokerMessageLogMapper;
+    /**
+     * 回调方法：confirm确认
+     */
+    private final RabbitTemplate.ConfirmCallback confirmCallback = new RabbitTemplate.ConfirmCallback() {
+        @Override
+        public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+            System.out.println("correlationData：" + correlationData);
+            String messageId = correlationData.getId();
+            if (ack) {
+                // 如果confirm返回成功，则进行更新
+                BrokerMessageLogPO messageLogPO = new BrokerMessageLogPO();
+                messageLogPO.setMessageId(messageId);
+                messageLogPO.setStatus(Constant.SEND_SUCCESS);
+                brokerMessageLogMapper.changeBrokerMessageLogStatus(messageLogPO);
+            } else {
+                // 失败则进行具体的后续操作：重试或者补偿等
+                System.out.println("异常处理...");
+            }
+        }
+    };
 }

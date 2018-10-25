@@ -1,0 +1,37 @@
+spring:
+  rabbitmq:
+    addresses: localhost:5672
+    username: guest
+    password: guest
+    connection-timeout: 5000
+    publisher-confirms: true
+    publisher-returns: true
+    template:
+      mandatory: true
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql:localhost:3306/test?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+server:
+  servlet:
+    context-path: /rabbit-producer
+  port: 8001
+mybatis:
+  type-aliases-package: com.rabbitmq
+  mapper-locations: classpath:com/rabbitmq/mapping/*/*.xml
+logging:
+  level:
+    tk:
+      mybatis: trace
+    com:
+      rabbitmq: debug
+
