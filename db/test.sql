@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 5.7.18-log : Database - test
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -21,11 +22,11 @@ USE `test`;
 DROP TABLE IF EXISTS `broker_message_log`;
 
 CREATE TABLE `broker_message_log` (
-  `message_id` int(11) NOT NULL,
+  `message_id` varchar(128) NOT NULL,
   `message` varchar(128) DEFAULT 'null',
   `try_count` int(4) DEFAULT '0' COMMENT '重试次数',
   `status` tinyint(1) DEFAULT '0' COMMENT '消息状态0-发送中 1-发送成功 2-发送失败',
-  `next_try` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '下次重试时间',
+  `next_retry` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '下次重试时间',
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`message_id`)
@@ -38,9 +39,9 @@ CREATE TABLE `broker_message_log` (
 DROP TABLE IF EXISTS `t_order`;
 
 CREATE TABLE `t_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` varchar(128) NOT NULL,
   `name` varchar(128) DEFAULT NULL,
-  `message_id` int(11) NOT NULL,
+  `message_id` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
